@@ -8,7 +8,7 @@ import uuid
 app = FastAPI()
 
 s3_client = boto3.client('s3')
-PENDING_BUCKET = 'movies-pending'
+PENDING_BUCKET = 'movies-stage'
 FINAL_BUCKET = 'movies-final'
 
 class Movie(BaseModel):
