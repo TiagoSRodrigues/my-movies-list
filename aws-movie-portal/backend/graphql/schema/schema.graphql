@@ -1,0 +1,108 @@
+type Movie {
+  id: ID!
+  title: String!
+  year: Int!
+  genre: String
+  director: String
+  synopsis: String
+  rating: Float
+  watchedDate: String
+  imageUrl: String
+  actors: [String]
+  reviews: [Review]
+  createdAt: String
+  updatedAt: String
+}
+
+type Review {
+  id: ID!
+  movieId: ID!
+  rating: Float!
+  comment: String
+  createdAt: String
+  updatedAt: String
+}
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  watchlist: [Movie]
+  favoriteGenres: [String]
+}
+
+type Query {
+  getMovie(id: ID!): Movie
+  listMovies(limit: Int, nextToken: String): MovieConnection
+  listMoviesByGenre(
+    genre: String!
+    limit: Int
+    nextToken: String
+  ): MovieConnection
+  listMoviesByRating(
+    minRating: Float!
+    limit: Int
+    nextToken: String
+  ): MovieConnection
+  getUser(id: ID!): User
+}
+
+type Mutation {
+  createMovie(input: CreateMovieInput!): Movie
+  updateMovie(input: UpdateMovieInput!): Movie
+  deleteMovie(id: ID!): Movie
+  addReview(input: AddReviewInput!): Review
+  updateUser(input: UpdateUserInput!): User
+  addToWatchlist(userId: ID!, movieId: ID!): User
+  removeFromWatchlist(userId: ID!, movieId: ID!): User
+}
+
+type Subscription {
+  onCreateMovie: Movie @aws_subscribe(mutations: ["createMovie"])
+  onUpdateMovie: Movie @aws_subscribe(mutations: ["updateMovie"])
+  onDeleteMovie: Movie @aws_subscribe(mutations: ["deleteMovie"])
+  onAddReview: Review @aws_subscribe(mutations: ["addReview"])
+}
+
+input CreateMovieInput {
+  title: String!
+  year: Int!
+  genre: String
+  director: String
+  synopsis: String
+  rating: Float
+  watchedDate: String
+  imageUrl: String
+  actors: [String]
+}
+
+input UpdateMovieInput {
+  id: ID!
+  title: String
+  year: Int
+  genre: String
+  director: String
+  synopsis: String
+  rating: Float
+  watchedDate: String
+  imageUrl: String
+  actors: [String]
+}
+
+input AddReviewInput {
+  movieId: ID!
+  rating: Float!
+  comment: String
+}
+
+input UpdateUserInput {
+  id: ID!
+  username: String
+  email: String
+  favoriteGenres: [String]
+}
+
+type MovieConnection {
+  items: [Movie]
+  nextToken: String
+}
